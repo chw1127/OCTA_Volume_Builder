@@ -1,0 +1,201 @@
+/*-
+ * #%L
+ * Volume Viewer plugin for Fiji.
+ * %%
+ * Copyright (C) 2005 - 2023 Fiji developers.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+/*
+ * Volume Viewer 2.0
+ * 27.11.2012
+ * 
+ * (C) Kai Uwe Barthel
+ */
+
+package com.cc.octavolumeviewer;
+
+import java.awt.Color;
+
+public class Control {
+
+	boolean LOG = false;
+
+	final static int ORIG = 0;
+	final static int GRAY = 1;
+	final static int SPECTRUM = 2;
+	final static int FIRE = 3;
+	final static int THERMAL = 4;
+	
+	
+	final static int SLICE = 0;
+	final static int SLICE_AND_BORDERS = 1;
+	final static int PROJECTION_MAX = 2;
+	final static int PROJECTION = 3;
+	final static int VOLUME = 4;
+	
+//	final static String [] renderName = { 
+//		"Slice", 
+//		"Slice & Borders", 
+//		"Max Projection", 
+//		"Projection", 
+//		"Volume" 
+//	};
+	final static String [] renderName = { 
+		"Slice (0)", 
+		"Slice & Borders (1)", 
+		"Max Projection (2)", 
+		"Projection (3)", 
+		"Volume (4)" 
+	};
+	
+	static final int NN = 0;
+	static final int TRILINEAR = 1;
+	static final int TRICUBIC_SPLINE = 2;
+	static final int TRICUBIC_POLYNOMIAL = 3;
+
+//	static final String [] interpolationName = { 
+//		"Nearest Neighbor", 
+//		"Trilinear",
+//		"Tricubic smooth",
+//		"Tricubic sharp"
+//	};
+	static final String [] interpolationName = { 
+		"临近插值 (0)",
+		"三线性插值 (1)",
+		"三次立方平滑 (2)",
+		"三次立方锐化 (3)"
+	};
+	
+	// transfer function modes 
+	static final int ALPHA1 = 0;
+	static final int ALPHA2 = 1;
+	static final int ALPHA3 = 2;
+	static final int ALPHA4 = 3;
+
+	
+	static final String [] lutName = { 
+		"Original (0)", 
+		"Grayscale (1)", 
+		"Spectrum LUT (2)", 
+		"Fire LUT (3)", 
+		"Thermal LUT (4)"}; 
+
+	
+	// stored vaiables (in prefs) //////////////////
+	int renderMode = VOLUME;
+	int interpolationMode = TRILINEAR;
+	Color backgroundColor = new Color(0xFF003465);
+	int lutNr = ORIG;
+	float zAspect = 1;
+	float sampling = 1;
+	float dist = 0;
+	boolean showAxes = false;
+	boolean showSlices = false;
+	boolean showClipLines = false;
+	float scale = 1;
+	float degreeX = 115; 
+	float degreeY = 41; 
+	float degreeZ = 17;
+	int alphaMode = ALPHA1;
+	int windowMinHeight = 787;
+	int windowHeight = windowMinHeight;
+	
+	int windowWidthImageRegion = 864+200;
+	
+	// illumination
+	boolean useLight = false;
+	float ambientValue = 0.5f;
+	float diffuseValue = 0.5f;
+	float specularValue = 0.5f;
+	float shineValue = 17.15f;
+	float objectLightValue = 0.5f;
+	int lightRed = 255;
+	int lightGreen = 128;
+	int lightBlue = 0;
+	boolean snapshot = false;
+	
+	int xloc;
+	int yloc;
+	/////////////////////////////////////
+		
+	boolean drag;
+	boolean spinnersAreChanging;
+
+	int maxDist;
+	float scaledDist;
+
+	boolean isRGB = false;
+	int lumTolerance = 32, gradTolerance = 64;
+	
+	boolean showTF = true;
+	boolean alphaWasChanged = true;
+	boolean pickColor = false;
+	
+	int rPaint = 128, gPaint = 128, bPaint = 128, indexPaint = 128;
+	int alphaPaint2 = 64, alphaPaint3 = 64, alphaPaint4 = 64;
+	
+	int windowWidthSliderRegion = 55; 
+	int windowWidthSlices = 200; 
+
+	float positionFactorX = 0.5f; // indicates the shown position of the xslice
+	float positionFactorY = 0.5f; // indicates the shown position of the yslice
+	float positionFactorZ = 0.5f; // indicates the shown position of the zslice
+	
+	private Volume_Viewer vv;
+
+	public boolean distWasSet;
+
+	public boolean isReady = false;
+
+	
+	public Control(Volume_Viewer volume_Viewer) {
+		this.vv = volume_Viewer;
+	}
+
+	public void newDisplayMode() {
+		vv.gui.newDisplayMode();
+	}
+
+	public void reset() {
+		interpolationMode = TRILINEAR;
+		backgroundColor = new Color(0xFF003465);
+		lutNr = ORIG;
+		zAspect = 1;
+		sampling = 1;
+		//float dist = 0;
+		showAxes = true;
+		showSlices = false;
+		showClipLines = false;
+		scale = 1;
+		degreeX = 115; 
+		degreeY = 41; 
+		degreeZ = 17;
+		alphaMode = ALPHA1;
+		
+		// illumination
+		useLight = false;
+		ambientValue = 0.5f;
+		diffuseValue = 0.5f;
+		specularValue = 0.5f;
+		shineValue = 17.15f;
+		objectLightValue = 0.5f;
+		lightRed = 255;
+		lightGreen = 128;
+		lightBlue = 0;
+		
+	}
+}
